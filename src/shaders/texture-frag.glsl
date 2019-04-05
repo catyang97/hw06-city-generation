@@ -12,7 +12,6 @@ in vec2 fs_Pos;
 out vec4 out_Col;
 
 void main() {
-  // out_Col = vec4(0.5 * (fs_Pos + vec2(1.0)), 0.0, 1.0);
   vec2 xy = vec2(0.5 * (fs_Pos.x + 1.0), 0.5 * (fs_Pos.y + 1.0));
   vec4 texCol = texture(u_TextureSampler, xy);
   vec3 totalColor = vec3(0.0);

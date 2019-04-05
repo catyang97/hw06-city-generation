@@ -1,4 +1,4 @@
-import {vec3, vec4, mat4, mat3} from 'gl-matrix';
+import {vec2, vec3, vec4, mat4, mat3} from 'gl-matrix';
 import Drawable from './Drawable';
 import {gl} from '../../globals';
 
@@ -45,6 +45,7 @@ class ShaderProgram {
   unifPopulation: WebGLUniformLocation;
   unifSampler2D: WebGLUniformLocation;
   unifDensity: WebGLUniformLocation;
+  unifPlanePos: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
     this.prog = gl.createProgram();
@@ -73,6 +74,7 @@ class ShaderProgram {
     this.unifPopulation = gl.getUniformLocation(this.prog, "u_Population");
     this.unifSampler2D = gl.getUniformLocation(this.prog, "u_TextureSampler");
     this.unifDensity = gl.getUniformLocation(this.prog, "u_Density");
+    this.unifPlanePos   = gl.getUniformLocation(this.prog, "u_PlanePos");
 
     this.attrTransform1 = gl.getAttribLocation(this.prog, "vs_Transform1");
     this.attrTransform2 = gl.getAttribLocation(this.prog, "vs_Transform2");
@@ -142,6 +144,13 @@ class ShaderProgram {
     }
   }
 
+  setPlanePos(pos: vec2) {
+    this.use();
+    if (this.unifPlanePos !== -1) {
+      gl.uniform2fv(this.unifPlanePos, pos);
+    }
+  }
+  
   setTerrain(t: number) {
     this.use();
     if (this.unifTerrain !== -1) {

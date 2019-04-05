@@ -1,5 +1,14 @@
 # Homework 6: City Generation
 
+## PennKey: catyang
+
+---
+## Progress
+- Worked on creating a 3D model of the terrain using the subdivide plane from Homework 2, to no avail.
+- Added a sky to the scene.
+
+
+
 For this assignment, you will generate a collection of 3D buildings within the road networks you created for the previous assignment.
 
 For this assignment, you will generate a network of roads to form the basis of a city using a modified version of L-systems. As in homework 4, you will be using instanced rendering to draw your road networks.

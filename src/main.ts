@@ -1,4 +1,4 @@
-import {vec3, mat3, mat4} from 'gl-matrix';
+import {vec2, vec3, mat3, mat4} from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import ScreenQuad from './geometry/ScreenQuad';
@@ -8,6 +8,7 @@ import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import RoadMap from './RoadMap';
 import Square from './geometry/Square';
+import Plane from './geometry/Plane';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -21,6 +22,7 @@ const controls = {
 
 let screenQuad: ScreenQuad;
 let square: Square;
+let plane: Plane;
 let time: number = 0.0;
 let roads: RoadMap;
 let prevDensity: number;
@@ -29,6 +31,7 @@ let branches: number;
 function loadScene(road: RoadMap) {
   square = new Square();
   square.create();
+
   let transforms: mat4[] = road.getTransforms();
   let n: number = transforms.length;
   console.log("n: " + n);
@@ -108,7 +111,8 @@ function main() {
   // loadScene();
   screenQuad = new ScreenQuad();
   screenQuad.create();
-
+  plane = new Plane(vec3.fromValues(0,0,0), vec2.fromValues(100,100), 20);
+  plane.create();
   const camera = new Camera(vec3.fromValues(50, 50, 10), vec3.fromValues(50, 50, 0));
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0.2, 0.2, 0.2, 1);
@@ -122,6 +126,11 @@ function main() {
   const flat = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/flat-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/flat-frag.glsl')),
+  ]);
+
+  const sky = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/sky-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/sky-frag.glsl')),
   ]);
 
   const textureShader = new ShaderProgram([
@@ -201,6 +210,7 @@ function main() {
     stats.begin();
     instancedShader.setTime(time);
     flat.setTime(time++);
+    sky.setTime(time++);
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
@@ -228,8 +238,10 @@ function main() {
       loadScene(roads);
     }
 
-    renderer.render(camera, textureShader, [screenQuad]);
+    renderer.render(camera, textureShader, [plane]);
     renderer.render(camera, instancedShader, [square]);
+    renderer.render(camera, sky, [screenQuad]);
+
     // renderer.render(camera, instancedShader, []);
     stats.end();
 

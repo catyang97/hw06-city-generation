@@ -3,7 +3,7 @@ export function setGL(_gl: WebGL2RenderingContext) {
   gl = _gl;
 }
 
-let obj0: string = readTextFile('./src/testCube.obj')
+// let obj0: string = readTextFile('./src/testCube.obj')
 
 export function readTextFile(file: string): string
 {
