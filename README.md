@@ -7,7 +7,7 @@
 - Worked on creating a 3D model of the terrain using the subdivide plane from Homework 2, to no avail.
 - Added a sky to the scene.
 
-
+---
 
 For this assignment, you will generate a collection of 3D buildings within the road networks you created for the previous assignment.
 
